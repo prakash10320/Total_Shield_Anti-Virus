@@ -7,7 +7,6 @@
 @layer theme {
   :root, :host {
     --color-red-400: oklch(70.4% 0.191 22.216);
-    --color-red-600: oklch(57.7% 0.245 27.325);
     --color-yellow-400: oklch(85.2% 0.199 91.936);
     --color-yellow-500: oklch(79.5% 0.184 86.047);
     --color-green-400: oklch(79.2% 0.209 151.711);
@@ -354,9 +353,6 @@
   }
   .mt-6 {
     margin-top: calc(var(--spacing) * 6);
-  }
-  .mt-10 {
-    margin-top: calc(var(--spacing) * 10);
   }
   .mt-12 {
     margin-top: calc(var(--spacing) * 12);
@@ -1090,9 +1086,6 @@
   }
   .text-red-400 {
     color: var(--color-red-400);
-  }
-  .text-red-600 {
-    color: var(--color-red-600);
   }
   .text-secondary-foreground {
     color: var(--secondary-foreground);
