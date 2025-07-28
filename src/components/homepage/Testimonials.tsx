@@ -53,10 +53,9 @@ export default function TestimonialsSlider() {
       renderMode: "performance",
     },
     [
-      // Autoplay plugin
       (slider) => {
         let timeout: ReturnType<typeof setTimeout>;
-        let clearNextTimeout = () => clearTimeout(timeout);
+        const clearNextTimeout = () => clearTimeout(timeout); // ✅ ESLint fix here
 
         function nextTimeout() {
           clearTimeout(timeout);
@@ -65,9 +64,7 @@ export default function TestimonialsSlider() {
           }, 2000);
         }
 
-        slider.on("created", () => {
-          nextTimeout();
-        });
+        slider.on("created", nextTimeout);
         slider.on("dragStarted", clearNextTimeout);
         slider.on("animationEnded", nextTimeout);
         slider.on("updated", nextTimeout);
