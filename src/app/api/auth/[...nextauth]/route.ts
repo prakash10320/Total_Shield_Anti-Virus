@@ -1,6 +1,26 @@
-// File: app/api/auth/[...nextauth]/route.ts
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { JWT } from "next-auth/jwt";
+
+// Extend NextAuth types for user role
+declare module "next-auth" {
+  interface Session {
+    user: {
+      name: string;
+      email: string;
+      role: string;
+    };
+  }
+  interface User {
+    role: string;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    role?: string;
+  }
+}
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -28,14 +48,14 @@ const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        token.role = (user as any).role; // extend token with role
+      if (user?.role) {
+        token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
-      if (session.user) {
-        (session.user as any).role = token.role; // extend session with role
+      if (session.user && token.role) {
+        session.user.role = token.role;
       }
       return session;
     },
