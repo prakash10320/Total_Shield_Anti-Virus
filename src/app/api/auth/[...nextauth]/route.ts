@@ -1,7 +1,9 @@
-import NextAuth from "next-auth";
+// File: app/api/auth/[...nextauth]/route.ts
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { JWT } from "next-auth/jwt";
 
-const handler = NextAuth({
+const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -21,29 +23,29 @@ const handler = NextAuth({
             role: "admin",
           };
         }
-
-        return null; // Invalid credentials
+        return null;
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = user.role;
+        token.role = (user as any).role; // ✅ Cast to any to bypass TS error
       }
       return token;
     },
     async session({ session, token }) {
-      if (token) {
-        session.user.role = token.role;
+      if (session.user) {
+        (session.user as any).role = token.role; // ✅ Cast to any to extend session.user
       }
       return session;
     },
   },
   pages: {
-    signIn: "/login", // Your custom login page
+    signIn: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET || "your-secret-key",
-});
+};
 
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
