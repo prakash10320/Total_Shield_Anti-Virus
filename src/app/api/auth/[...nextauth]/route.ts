@@ -1,7 +1,6 @@
 // File: app/api/auth/[...nextauth]/route.ts
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { JWT } from "next-auth/jwt";
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -30,13 +29,13 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = (user as any).role; // ✅ Cast to any to bypass TS error
+        token.role = (user as any).role; // extend token with role
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as any).role = token.role; // ✅ Cast to any to extend session.user
+        (session.user as any).role = token.role; // extend session with role
       }
       return session;
     },
